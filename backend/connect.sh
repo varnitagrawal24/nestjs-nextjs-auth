@@ -1,0 +1,1 @@
+docker exec -it nestjs-nextjsauth-backend bash
