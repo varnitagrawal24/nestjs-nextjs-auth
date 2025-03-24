@@ -7,6 +7,6 @@ type urlType = {
 };
 
 function getUrl(data: urlType): string {
-    const baseUrl = process.env.UI_BASE_URL + '/api'
+    const baseUrl = process.env.API_BASE_URL ?? ''
     return generateUrl(baseUrl, data.path, data.params, data.query);
 }
