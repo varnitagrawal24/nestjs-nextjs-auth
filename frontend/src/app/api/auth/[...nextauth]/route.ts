@@ -13,7 +13,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         try {
           const res = await axios.post(
-            `${process.env.NEST_API_URL}/auth/login`,
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
             {
               email: credentials?.email,
               password: credentials?.password,
@@ -50,7 +50,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
     maxAge: 24 * 60 * 60, // 1 day
