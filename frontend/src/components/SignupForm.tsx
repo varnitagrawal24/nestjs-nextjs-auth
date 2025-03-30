@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { signup } from "@/services/auth.service";
 
 const signupSchema = z.object({
     username: z.string().min(3, { message: 'Username must be 3 character long' }),
@@ -24,8 +25,12 @@ export default function SignUpForm(){
         }
     })
 
-    const onSubmit = (data: signupData) => {
+    const onSubmit = async (data: signupData) => {
         console.log("🚀 ~ onSubmit ~ data:", data)
+
+        const res = await signup(data);
+        console.log("🚀 ~ onSubmit ~ res:", res)
+
     }
 
     return <>
