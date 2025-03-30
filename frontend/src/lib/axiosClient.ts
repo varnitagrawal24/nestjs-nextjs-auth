@@ -30,7 +30,7 @@ const requestHandler = async (
     return response?.data;
   } catch (e: any) {
     return {
-      status: false,
+      success: false,
       message: e.message,
       error: {
         ...e,
