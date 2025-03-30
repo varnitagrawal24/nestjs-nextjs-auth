@@ -13,5 +13,5 @@ function getUrl(data: urlType): string {
 
 //auth
 export const SIGN_UP_URL = () => getUrl({
-  path: '/auth/singup'
+  path: '/auth/signup'
 })

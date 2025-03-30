@@ -8,7 +8,7 @@ import { LocalAuthGuard } from 'src/guards/local-auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('singup')
+  @Post('signup')
   @UsePipes(new ZodValidationPipe(signUpSchema))
   registerUser(@Body() createUserDto: SignUpDto){
     return this.authService.register(createUserDto)
