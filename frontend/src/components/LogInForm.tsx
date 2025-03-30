@@ -4,6 +4,9 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { login } from "@/services/auth.service";
 
 const logInSchema = z.object({
     email: z.string().email({ message: 'Invalid Email' }),
@@ -13,6 +16,9 @@ const logInSchema = z.object({
 type logInData = z.infer<typeof logInSchema>;
 
 export default function LogInForm(){
+
+    const router = useRouter();
+
     const loginForm = useForm<logInData>({
         resolver: zodResolver(logInSchema),
         defaultValues: {
@@ -23,6 +29,18 @@ export default function LogInForm(){
 
     const onSubmit = async (data: logInData) => {
         console.log("🚀 ~ onSumbit ~ data:", data)
+
+        const res = await signIn('credentials', {
+            redirect: false,
+            email: data.email,
+            password: data.password
+        })
+
+        if (res?.ok) {
+            router.push("/");
+          } else {
+            alert("Invalid credentials");
+          }
     }
 
     return<>

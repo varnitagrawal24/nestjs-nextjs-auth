@@ -1,6 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import axios from "axios";
+import { login } from "@/services/auth.service";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -12,21 +12,20 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          const res = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
-            {
-              email: credentials?.email,
-              password: credentials?.password,
-            }
-          );
+          const res = await login({
+            email: credentials?.email ?? "",
+            password: credentials?.password ?? "",
+          });
+
+          if (!res.success) return null;
 
           const user = res.data;
           if (user && user.accessToken) {
             return {
               id: user.id,
-              name: user.name,
+              username: user.username,
               email: user.email,
-              token: user.accessToken,
+              accessToken: user.accessToken,
             };
           }
 
@@ -42,11 +41,23 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token }) {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.username = user.username;
+        token.email = user.email;
+        token.accessToken = user.accessToken;
+      }
       return token;
     },
     async session({ session, token }) {
-      session.user = token;
+      session.user = {
+        ...session.user,
+        id: token.id,
+        username: token.username,
+        email: token.email,
+        accessToken: token.accessToken,
+      };
       return session;
     },
   },

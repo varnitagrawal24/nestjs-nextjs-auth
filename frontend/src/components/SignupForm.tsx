@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { signup } from "@/services/auth.service";
+import { useSession } from "next-auth/react";
 
 const signupSchema = z.object({
     username: z.string().min(3, { message: 'Username must be 3 character long' }),
@@ -15,6 +16,9 @@ const signupSchema = z.object({
 type signupData = z.infer<typeof signupSchema>;
 
 export default function SignUpForm(){
+
+    const session = useSession()
+    console.log("🚀 ~ SignUpForm ~ session:", session)
 
     const signupForm = useForm<signupData>({
         resolver: zodResolver(signupSchema),
